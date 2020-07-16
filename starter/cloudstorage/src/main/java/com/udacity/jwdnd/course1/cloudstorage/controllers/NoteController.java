@@ -21,12 +21,6 @@ public class NoteController {
 
     @PostMapping
     public String insertOrAddNote(Authentication authentication, Note note){
-        System.out.println("***********triggered");
-        System.out.println(note.getNotedescription());
-        System.out.println(note.getNotetitle());
-        System.out.println(note.getNoteid());
-        System.out.println(note.getUserid());
-        System.out.println("****************");
         String username = authentication.getName();
         User user = (User)userService.loadUserByUsername(username);
         if(note.getNoteid() > 0){

@@ -10,6 +10,14 @@ public class Note{
         return noteid;
     }
 
+    public void setNoteid(int noteid) {
+        this.noteid = noteid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
     public String getNotetitle() {
         return notetitle;
     }

@@ -8,6 +8,8 @@ public class Credential{
     private String password;
     private int userid;
 
+    public Credential(){}
+
     public Credential(int credentialid, String url, String username, String key, String password, int userid) {
         this.credentialid = credentialid;
         this.url = url;
@@ -35,6 +37,14 @@ public class Credential{
 
     public String getPassword() {
         return password;
+    }
+
+    public void setCredentialid(int credentialid) {
+        this.credentialid = credentialid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
     public int getUserid() {

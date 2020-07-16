@@ -14,17 +14,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class HomePageController {
+public class HomeController {
     CredentialService credentialService;
     FileService fileService;
     NoteService noteService;
     UserService userService;
 
-    public HomePageController(UserService userService, CredentialService credentialService, FileService fileService, NoteService noteService) {
+    public HomeController(UserService userService, CredentialService credentialService, FileService fileService, NoteService noteService) {
         this.userService = userService;
         this.credentialService = credentialService;
         this.fileService = fileService;
         this.noteService = noteService;
+    }
+
+    @GetMapping("/login")
+    public String loginView(){
+        return "login";
+    }
+
+    @GetMapping("/")
+    public String defaultView(){
+        return "redirect:/home";
     }
 
     @GetMapping("/home")

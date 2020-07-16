@@ -32,9 +32,15 @@ public class FileService {
         return homeFiles;
     }
 
+    private boolean fileExist(String filename){
+        return !fileMapper.getByFilename(filename).isEmpty();
+    }
+
     public int addFile(MultipartFile multipartFile, int userid) throws IOException {
         File file = new File();
         try{
+            if(fileExist(multipartFile.getOriginalFilename()))
+                return -1;
             file.setFilename(multipartFile.getOriginalFilename());
             file.setContenttype(multipartFile.getContentType());
             file.setFilesize(String.valueOf(multipartFile.getSize()));

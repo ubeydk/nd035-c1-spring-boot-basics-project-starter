@@ -28,7 +28,9 @@ public class FileController {
         User user = (User) userService.loadUserByUsername(username);
         if(fileUpload.isEmpty())
             return "redirect:/result?error";
-        fileService.addFile(fileUpload, user.getUserid());
+        int serviceResult = fileService.addFile(fileUpload, user.getUserid());
+        if(serviceResult == -1)
+            return "redirect:/result?error";
         return "redirect:/result?success";
     }
 

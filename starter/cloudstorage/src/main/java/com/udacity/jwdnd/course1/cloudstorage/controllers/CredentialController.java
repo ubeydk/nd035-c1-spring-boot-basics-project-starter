@@ -3,39 +3,40 @@ package com.udacity.jwdnd.course1.cloudstorage.controllers;
 import com.udacity.jwdnd.course1.cloudstorage.models.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.models.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/credentials")
 public class CredentialController {
 
     CredentialService credentialService;
+    UserService userService;
 
-    public CredentialController(CredentialService credentialService) {
+    public CredentialController(UserService userService, CredentialService credentialService) {
+        this.userService = userService;
         this.credentialService = credentialService;
-    }
-
-    @DeleteMapping
-    public String deleteCredential(@RequestParam("id") int credentialid){
-        if(credentialid > 0){
-            credentialService.deleteCredential(credentialid);
-            return "/result?success";
-        }
-        return "/result?error";
     }
 
     @PostMapping
     public String addOrUpdateCredential(Authentication authentication, Credential credential){
-        User user = (User)authentication.getPrincipal();
+        String username = authentication.getName();
+        User user = (User)userService.loadUserByUsername(username);
         if(credential.getCredentialid() > 0)
             credentialService.updateCredential(credential);
         else
             credentialService.insertCredential(credential, user.getUserid());
-        return "/result/success";
+        return "redirect:/result?success";
+    }
+
+    @GetMapping("/delete")
+    public String deleteCredential(@RequestParam("id") int credentialid){
+        if(credentialid > 0){
+            credentialService.deleteCredential(credentialid);
+            return "redirect:/result?success";
+        }
+        return "redirect:/result?error";
     }
 }

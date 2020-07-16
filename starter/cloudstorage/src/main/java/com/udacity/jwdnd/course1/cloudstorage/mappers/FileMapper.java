@@ -10,8 +10,8 @@ public interface FileMapper {
     @Select("SELECT * FROM FILES WHERE fileid = #{fileid}")
     public File getById(int fileid);
 
-    @Select("SELECT fileid FROM FILES WHERE filename = #{filename}")
-    public List<File> getByFilename(String filename);
+    @Select("SELECT fileid FROM FILES WHERE filename = #{filename} AND userid = #{userid}")
+    public List<File> getByFilename(String filename, int userid);
 
     @Select("SELECT * FROM FILES WHERE userid = #{userid}")
     public List<File> getByUserid(int userid);

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CredentialService {
@@ -19,14 +20,15 @@ public class CredentialService {
     }
 
     public Credential getById(int credentialid){
-        return credentialMapper.getById(credentialid);
+        return getDecryptedPassword(credentialMapper.getById(credentialid));
     }
 
     public List<Credential> getByUserid(int userid){
-        return credentialMapper.getByUserid(userid);
+        return credentialMapper.getByUserid(userid).stream().map(s -> getDecryptedPassword(s)).collect(Collectors.toList());
     }
 
     public int insertCredential(Credential credential, int userid){
+        encryptCredential(credential);
         return credentialMapper.insertCredential(credential, userid);
     }
 
@@ -35,6 +37,7 @@ public class CredentialService {
     }
 
     public int updateCredential(Credential credential){
+        encryptCredential(credential);
         return credentialMapper.updateById(credential);
     }
 
@@ -48,7 +51,8 @@ public class CredentialService {
         return credential;
     }
 
-    private String getDecryptedPassword(Credential credential){
-        return encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+    private Credential getDecryptedPassword(Credential credential){
+        credential.setDecryptedPassword(encryptionService.decryptValue(credential.getPassword(), credential.getKey()));
+        return credential;
     }
 }
